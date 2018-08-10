@@ -6,7 +6,9 @@ import com.example.springdatagetone.infrastructure.repository.CustomerRepository
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,27 +20,33 @@ import static java.util.Objects.nonNull;
 @Service
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class CustomerService {
     
     CustomerReadOnlyQueryFacade readOnlyQueryFacade;
     CustomerRepository customerRepository;
     
+    @Transactional
     public void update(Customer customer) {
-        System.out.println("---- before getOne");
+        log.info("---- before getOne");
         Customer toUpdate = readOnlyQueryFacade.getOne(customer.getId());
-        System.out.println("---- after getOne");
+        log.info("---- after getOne");
         
         if (nonNull(customer.getFirstName())) {
-            System.out.println("------ before updating...");
+            log.info("------ before updating...");
             toUpdate.updateFrom(customer);
-            System.out.println("------ after updating...");
+            log.info("------ after updating...");
         }
 
-        System.out.println("---- saving to database...");
+        log.info("---- saving to database...");
         customerRepository.save(toUpdate);
     }
 
     public List<Customer> findAll() {
         return readOnlyQueryFacade.findAll();
+    }
+
+    public Customer findById(long id) {
+        return readOnlyQueryFacade.findById(id);
     }
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -25,5 +26,9 @@ public class CustomerReadOnlyQueryFacade {
 
     public List<Customer> findAll() {
         return customerRepository.findAll();
+    }
+
+    public Customer findById(long id) {
+        return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }

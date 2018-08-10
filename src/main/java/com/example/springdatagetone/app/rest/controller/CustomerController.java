@@ -31,4 +31,9 @@ public class CustomerController {
     public List<Customer> findAll() {
         return customerService.findAll();
     }
+    
+    @GetMapping("{id}")
+    public Customer findById(@PathVariable("id") Long id) {
+        return customerService.findById(id);
+    }
 }
