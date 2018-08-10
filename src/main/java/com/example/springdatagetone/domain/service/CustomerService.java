@@ -19,22 +19,23 @@ import static java.util.Objects.nonNull;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerService {
+    
     CustomerReadOnlyQueryFacade readOnlyQueryFacade;
     CustomerRepository customerRepository;
     
-    public Customer update(Customer customer) {
+    public void update(Customer customer) {
         System.out.println("---- before getOne");
         Customer toUpdate = readOnlyQueryFacade.getOne(customer.getId());
         System.out.println("---- after getOne");
         
         if (nonNull(customer.getFirstName())) {
             System.out.println("------ before updating...");
-            toUpdate.setFirstName(customer.getFirstName());
+            toUpdate.updateFrom(customer);
             System.out.println("------ after updating...");
         }
 
         System.out.println("---- saving to database...");
-        return customerRepository.save(toUpdate);
+        customerRepository.save(toUpdate);
     }
 
     public List<Customer> findAll() {
