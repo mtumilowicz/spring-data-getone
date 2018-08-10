@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by mtumilowicz on 2018-08-10.
@@ -28,7 +28,7 @@ public class CustomerReadOnlyQueryFacade {
         return customerRepository.findAll();
     }
 
-    public Customer findById(int id) {
-        return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public Optional<Customer> findById(int id) {
+        return customerRepository.findById(id);
     }
 }

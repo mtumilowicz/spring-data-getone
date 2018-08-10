@@ -5,6 +5,8 @@ import com.example.springdatagetone.domain.model.Customer
 import com.example.springdatagetone.infrastructure.repository.CustomerRepository
 import spock.lang.Specification
 
+import javax.persistence.EntityNotFoundException
+
 /**
  * Created by mtumilowicz on 2018-08-10.
  */
@@ -50,5 +52,28 @@ class CustomerServiceTest extends Specification {
 
         then:
         1 * customerReadOnlyQueryFacade.findAll()
+    }
+    
+    def "test findById found"() {
+        given:
+        def customerReadOnlyQueryFacade = Mock(CustomerReadOnlyQueryFacade) {
+            findById(1) >> Optional.of(Mock(Customer))
+        }
+
+        expect:
+        new CustomerService(customerReadOnlyQueryFacade, Mock(CustomerRepository)).findById(1)
+    }
+
+    def "test findById not found"() {
+        given:
+        def customerReadOnlyQueryFacade = Mock(CustomerReadOnlyQueryFacade) {
+            findById(1) >> Optional.empty()
+        }
+
+        when:
+        new CustomerService(customerReadOnlyQueryFacade, Mock(CustomerRepository)).findById(1)
+        
+        then:
+        thrown(EntityNotFoundException)
     }
 }

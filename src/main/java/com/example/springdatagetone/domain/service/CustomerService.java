@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
@@ -47,6 +48,6 @@ public class CustomerService {
     }
 
     public Customer findById(int id) {
-        return readOnlyQueryFacade.findById(id);
+        return readOnlyQueryFacade.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
