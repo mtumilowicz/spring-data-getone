@@ -9,6 +9,6 @@ import lombok.Value;
 @Value
 @Builder
 public class CustomerDto {
-    long id;
+    int id;
     String firstName;
 }

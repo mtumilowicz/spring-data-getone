@@ -19,7 +19,7 @@ import static java.util.Objects.nonNull;
 @Builder
 public class Customer {
     @Id
-    Long id;
+    Integer id;
     String firstName;
     
     public void updateFrom(@NonNull Customer customer) {

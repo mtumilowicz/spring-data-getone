@@ -33,7 +33,10 @@ public class CustomerController {
     }
     
     @GetMapping("{id}")
-    public Customer findById(@PathVariable("id") Long id) {
+    public Customer findById(@PathVariable("id") int id) {
         return customerService.findById(id);
     }
+
+    @GetMapping("health")
+    public void health() {}
 }

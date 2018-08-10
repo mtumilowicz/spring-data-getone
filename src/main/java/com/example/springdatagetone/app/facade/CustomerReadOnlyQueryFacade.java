@@ -20,7 +20,7 @@ public class CustomerReadOnlyQueryFacade {
     
     CustomerRepository customerRepository;
     
-    public Customer getOne(long id) {
+    public Customer getOne(int id) {
         return customerRepository.getOne(id);
     }
 
@@ -28,7 +28,7 @@ public class CustomerReadOnlyQueryFacade {
         return customerRepository.findAll();
     }
 
-    public Customer findById(long id) {
+    public Customer findById(int id) {
         return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }

@@ -46,7 +46,7 @@ public class CustomerService {
         return readOnlyQueryFacade.findAll();
     }
 
-    public Customer findById(long id) {
+    public Customer findById(int id) {
         return readOnlyQueryFacade.findById(id);
     }
 }
