@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
@@ -44,8 +45,8 @@ public class CustomerControllerIntegrationTest {
     }
 
     @Test
-    @Sql(value = {"findAll_entities_delete.sql", "findAll_entities_insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "findAll_entities_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = {"delete_all_customers.sql", "insert_customer_id_1.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "delete_all_customers.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findAll_entities() {
 //        given
         List<Customer> expectedCustomers = Collections.singletonList(Customer.builder()
@@ -67,8 +68,8 @@ public class CustomerControllerIntegrationTest {
     }
 
     @Test
-    @Sql(value = {"findById_found_delete.sql", "findById_found_insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "findById_found_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = {"delete_all_customers.sql", "insert_customer_id_1.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "delete_all_customers.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findById_found_status() {
 //        expect
         assertThat(restTemplate
@@ -80,8 +81,8 @@ public class CustomerControllerIntegrationTest {
     }
 
     @Test
-    @Sql(value = {"findById_found_delete.sql", "findById_found_insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "findById_found_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = {"delete_all_customers.sql", "insert_customer_id_1.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "delete_all_customers.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findById_found_entity() {
 //        given
         Customer expectedCustomer = Customer.builder()
@@ -99,8 +100,43 @@ public class CustomerControllerIntegrationTest {
     }
 
     @Test
-    @Sql(value = {"findById_found_delete.sql", "findById_found_insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "findById_found_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = "delete_all_customers.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void findById_notFound_status() {
+//        expect
+        assertThat(restTemplate
+                        .getForEntity(
+                                createURLWithPort("customers/1"),
+                                null)
+                        .getStatusCode(),
+                is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    @Sql(value = {"delete_all_customers.sql", "insert_customer_id_1.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "delete_all_customers.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void update_found_status() {
+//        given
+        CustomerDto customerDto = CustomerDto.builder()
+                .id(1)
+                .firstName("changed")
+                .build();
+
+//        and
+        HttpEntity<CustomerDto> entity = new HttpEntity<>(customerDto);
+
+//        expect
+        assertThat(restTemplate
+                        .exchange(createURLWithPort("customers"),
+                                HttpMethod.PUT,
+                                entity,
+                                String.class)
+                        .getStatusCode(),
+                is(HttpStatus.OK));
+    }
+
+    @Test
+    @Sql(value = {"delete_all_customers.sql", "insert_customer_id_1.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "delete_all_customers.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void update_found_entity() {
 //        given
         Customer expectedCustomer = Customer.builder()
@@ -122,6 +158,28 @@ public class CustomerControllerIntegrationTest {
         assertThat(restTemplate
                         .getForObject(createURLWithPort("customers/1"), Customer.class),
                 is(expectedCustomer));
+    }
+
+    @Test
+    @Sql(value = "delete_all_customers.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void update_notFound_status() {
+//        given
+        CustomerDto customerDto = CustomerDto.builder()
+                .id(1)
+                .firstName("changed")
+                .build();
+
+//        and
+        HttpEntity<CustomerDto> entity = new HttpEntity<>(customerDto);
+        
+//        expect
+        assertThat(restTemplate
+                        .exchange(createURLWithPort("customers"),
+                                HttpMethod.PUT,
+                                entity, 
+                                String.class)
+                        .getStatusCode(),
+                is(HttpStatus.NOT_FOUND));
     }
 
     private String createURLWithPort(String uri) {

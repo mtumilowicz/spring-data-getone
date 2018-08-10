@@ -7,6 +7,7 @@ import com.example.springdatagetone.domain.service.CustomerService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,13 +29,13 @@ public class CustomerController {
     }
     
     @GetMapping
-    public List<Customer> findAll() {
-        return customerService.findAll();
+    public ResponseEntity<List<Customer>> findAll() {
+        return ResponseEntity.ok(customerService.findAll());
     }
     
     @GetMapping("{id}")
-    public Customer findById(@PathVariable("id") int id) {
-        return customerService.findById(id);
+    public ResponseEntity<Customer> findById(@PathVariable("id") int id) {
+        return ResponseEntity.ok(customerService.findById(id));
     }
 
     @GetMapping("health")

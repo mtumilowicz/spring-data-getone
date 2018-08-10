@@ -30,7 +30,7 @@ public class AppRunner implements CommandLineRunner {
         log.info("-- update ends");
 
         log.info("-- retrieving customer id = 1 ....");
-        Customer customer = customerController.findById(1);
+        Customer customer = Objects.requireNonNull(customerController.findById(1).getBody());
         log.info("-- retrieved customer id = 1");
 
         assert Objects.equals(customer.getFirstName(), "changed");

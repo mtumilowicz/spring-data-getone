@@ -48,6 +48,7 @@ public class CustomerService {
     }
 
     public Customer findById(int id) {
-        return readOnlyQueryFacade.findById(id).orElseThrow(EntityNotFoundException::new);
+        return readOnlyQueryFacade.findById(id).orElseThrow(() -> 
+                new EntityNotFoundException("Customer with id = " + id + " cannot be found"));
     }
 }
