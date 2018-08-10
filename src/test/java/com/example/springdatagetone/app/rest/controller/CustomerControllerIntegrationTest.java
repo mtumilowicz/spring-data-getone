@@ -60,7 +60,7 @@ public class CustomerControllerIntegrationTest {
                         new ParameterizedTypeReference<List<Customer>>() {
                         }).getBody();
 
-//then
+//        then
         assertThat(customers,
                 is(expectedCustomers));
     }
