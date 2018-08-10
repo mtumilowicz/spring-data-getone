@@ -65,6 +65,38 @@ public class CustomerControllerIntegrationTest {
                 is(expectedCustomers));
     }
 
+    @Test
+    @Sql(value = {"findById_found_delete.sql", "findById_found_insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "findById_found_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void findById_found_status() {
+//        expect
+        assertThat(restTemplate
+                        .getForEntity(
+                                createURLWithPort("customers/1"),
+                                null)
+                        .getStatusCode(),
+                is(HttpStatus.OK));
+    }
+
+    @Test
+    @Sql(value = {"findById_found_delete.sql", "findById_found_insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "findById_found_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void findById_found_entity() {
+//        given
+        Customer expectedCustomer = Customer.builder()
+                .id(1)
+                .firstName("firstName")
+                .build();
+
+//        when
+        Customer customer = restTemplate
+                .getForObject(createURLWithPort("customers/1"), Customer.class);
+
+//        then
+        assertThat(customer,
+                is(expectedCustomer));
+    }
+
     private String createURLWithPort(String uri) {
         return "http://localhost:" + port + uri;
     }
