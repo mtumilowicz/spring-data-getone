@@ -1,5 +1,6 @@
 package com.example.springdatagetone.app.rest.controller;
 
+import com.example.springdatagetone.app.rest.controller.dto.CustomerDto;
 import com.example.springdatagetone.domain.model.Customer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -94,6 +95,32 @@ public class CustomerControllerIntegrationTest {
 
 //        then
         assertThat(customer,
+                is(expectedCustomer));
+    }
+
+    @Test
+    @Sql(value = {"findById_found_delete.sql", "findById_found_insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "findById_found_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void update_found_entity() {
+//        given
+        Customer expectedCustomer = Customer.builder()
+                .id(1)
+                .firstName("changed")
+                .build();
+
+//        and
+        CustomerDto customerDto = CustomerDto.builder()
+                .id(1)
+                .firstName("changed")
+                .build();
+
+//        when
+        restTemplate
+                .put(createURLWithPort("customers"), customerDto);
+
+//        then
+        assertThat(restTemplate
+                        .getForObject(createURLWithPort("customers/1"), Customer.class),
                 is(expectedCustomer));
     }
 
