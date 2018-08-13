@@ -3,10 +3,10 @@ The main goal of this project is to show how `getOne` works internally.
 
 # preface
 According to JPA specification, we have two methods:
-* `EntityManager.find()` - query database.
+* `EntityManager.find()` - query the database.
 * `EntityManager.getReference()` - load proxy (no database query), 
-    throws `EntityNotFoundException` if entity doesn't exist in database 
-    (when synchronization with database occurs).
+    throws `EntityNotFoundException` if entity doesn't exist in the database 
+    (when synchronization with the database occurs).
     
 # spring data
 * `Optional<T> findById(ID id)` - eager loading (internally `EntityManager.find()`)
