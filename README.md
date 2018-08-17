@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.com/mtumilowicz/spring-data-getone.svg?branch=master)
+[![Build Status](https://travis-ci.com/mtumilowicz/spring-data-getone.svg?branch=master)](https://travis-ci.com/mtumilowicz/spring-data-getone)
 # spring-data-getone
 The main goal of this project is to show how `getOne` works internally.
 
