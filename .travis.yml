@@ -1,4 +1,5 @@
 language: java
+jdk: oraclejdk8
 
 before_install:
   - chmod +x mvnw
@@ -11,3 +12,4 @@ deploy:
   provider: heroku
   api_key:
     secure: $HEROKU_KEY_API
+  app: test
