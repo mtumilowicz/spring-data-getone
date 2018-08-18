@@ -1,10 +1,13 @@
 language: java
+
 before_install:
   - chmod +x mvnw
+  
+branches:
+  only:
+  - master
+
 deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-  keep-history: true
-  on:
-    branch: master
+  provider: heroku
+  api_key:
+    secure: $HEROKU_KEY_API
