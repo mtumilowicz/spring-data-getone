@@ -12,3 +12,4 @@ deploy:
   provider: heroku
   api_key:
     secure: $HEROKU_KEY_API
+  app: springdatagetone
